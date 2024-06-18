@@ -1,12 +1,17 @@
-.header1
-{
-    text-align: center;
-    font-family: Verdana;
-    color: #4b5ae3;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.container
-{
-    width: 350px;
-    margin: 0 auto;
+.header {
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #4b5ae3;
+  font-weight: bold;
+}
+
+.container {
+  width: 350px;
+  margin: 0 auto;
 }
