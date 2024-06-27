@@ -1,9 +1,23 @@
-class Piece {
-    constructor() {
-        this.size = 40;
-        this.whiteSpace = 2;
-    }
+class Shape {
 
+    static rotate(array) {
+        // clockwise rotation 90 degree
+        const m = array.length;
+        const n = array[0].length;
+        // diagonal flip
+        for (let i = 0; i < m; i++) {
+            for (let j = i + 1; j < n; j++) {
+                const temp = array[i][j];
+                array[i][j] = array[j][i];
+                array[j][i] = temp;
+            }
+        }
+        // horizontal flip
+        for (let i = 0; i < m; i++) {
+            array[i].reverse();
+        }
+    }
+    
     static getShape(key) {
         let piece;
         switch (key) {
@@ -86,26 +100,5 @@ class Piece {
                 break;
         }
         return color
-    }
-
-    static rotate(array) {
-        const m = array.length;
-        const n = array[0].length;
-        for (let i = 0; i < Math.floor(m / 2); i++) {
-            for (let j = 0; j < n; j++) {
-                let temp = array[i][j];
-                array[i][j] = array[m-i-1][j];
-                array[m-i-1][j] = temp;
-            }
-        }
-
-        for (let i = 0; i < m; i++) {
-            for (let j = i+1; j < n; j++){
-                let temp = array[i][j];
-                array[i][j] = array[j][i];
-                array[j][i] = temp
-            }
-        }
-        return array
     }
 }

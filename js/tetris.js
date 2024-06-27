@@ -1,51 +1,49 @@
-const squareSize = 40
-const whiteSpace = 2
-const canvas = document.getElementById('canvas')
-const gameWindow = canvas.getBoundingClientRect()
-const gameWindowWith = gameWindow.width;
-const gameWindowHeight = gameWindow.height;
-const ctx = canvas.getContext('2d')
+class Tetris {
+    constructor() {
+        this.whiteSpace = 2;
+        this.board = Array.from({ length: 10 }, () => Array(10).fill(0))
+        this.tetrisIndex = ['I', 'O', 'J', 'L', 'S', 'Z', 'T'];
+        this.tetrisQueue = [];
+        this.generateTetris();
+    }
 
-let drawRect = (x, y, width, height, color) => {
-    ctx.fillStyle = color;
-    ctx.fillRect(y, x, width, height);
-}
+    getRandomShapeKey() {
+        // 2 tetris on hold: first one will be ongoing, second one is next tetris
+        const randomIndex = Math.floor(Math.random() * this.tetrisIndex.length);
+        return this.tetrisIndex[randomIndex]
+    }
 
-let drawBackground = () => {
-    drawRect(0, 0, canvas.width, canvas.height, '#ffffff');
-    for (let i = 0; i < gameWindowWith / 4; i++) {
-        for (let j = 0; j < gameWindowHeight / 4; j++) {
-            drawRect(
-                i * squareSize + whiteSpace,
-                j * squareSize + whiteSpace,
-                squareSize - whiteSpace * 2,
-                squareSize - whiteSpace * 2,
-                '#e6d9ff'
-            )
+    generateTetris() {
+        while (this.tetrisQueue.length < 2) {
+            const key = this.getRandomShapeKey();
+            const piece = Shape.getShape(key);
+            const color = Shape.getColor(key);
+            const position = [0, 3]  // center the Tetris
+            const tetris = { 'key': key, 'color': color, 'position': position, 'piece': piece };
+            this.tetrisQueue.push(tetris);
         }
     }
-}
 
-let drawTetris = (array, color) => {
-    for (let i = 0; i < array.length; i++) {
-        for (let j = 0; j < array[0].length; j++){
-            if (array[i][j] == 1) {
-                drawRect(
-                    i * squareSize + whiteSpace,
-                    j * squareSize + whiteSpace,
-                    squareSize - whiteSpace * 2,
-                    squareSize - whiteSpace * 2,
-                    color
-                )
-            }
-        }
+    removeTetris() {
+        const tetris = this.tetrisQueue.shift();
+        this.generateTetris()
+        return tetris
     }
-}
 
-drawBackground();
-const grid = new Grid(20, 10);
-const shape = 'S'
-const pieceColor = Piece.getColor(shape)
-let piece = Piece.getShape(shape)
-// piece = Piece.rotate(piece)
-drawTetris(piece, pieceColor)
+    rotate() {
+        Shape.rotate(this.tetrisQueue[0])
+    }
+
+    moveDownTetris() {
+        this.tetrisQueue[0].position[0]++;
+    }
+
+    moveLeftTetris() {
+        this.tetrisQueue[0].position[1]--;
+    }
+
+    moveRightTetris() {
+        this.tetrisQueue[0].position[1]++;
+    }
+
+}
